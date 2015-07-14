@@ -1,7 +1,7 @@
 Details about the OAF format
 -
 
- - Each file is stored with an accompanying header
+ - Each file added to the archive is stored with an accompanying header
  - The header does not have to be next to the file, it has a relative offset indicating where the file is located
  - The headers do not have to be together at the beginning of the archive
  - Storing an OAF inside an OAF has undefined read behaviour
