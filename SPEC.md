@@ -34,6 +34,7 @@ Headers have the form
 
 Header markers
 -
+
     Marker.Open     00 07 FF 3C 49 54 45 4D 3E FF 7F 08
     Marker.Close    07 FF 3C 2F 49 54 45 4D 3E FF 7F 08
 
@@ -41,9 +42,10 @@ Header markers
 
 Accepted Entry Types
 -
-  0x00    File
-  0x35    Directory (not yet implemented)
-  0xFF    ArchiveComment (not yet implemented)
+
+    0x00    File
+    0x35    Directory (not yet implemented)
+    0xFF    ArchiveComment (not yet implemented)
 
  - `Directory`s have content size `0`
  - The text of an `ArchiveComment` goes in the content section
@@ -54,12 +56,14 @@ Accepted Entry Types
 
 Accepted Compression Types
 -
-  0x00    None
-  0x01    GZIP (not yet implemented)
+
+    0x00    None
+    0x01    GZIP (not yet implemented)
 
 ---
 
 Accepted Hashing Types
 -
-  0x00    None
-  0x01    CRC32 (not yet implemented)
+
+    0x00    None
+    0x01    CRC32 (not yet implemented)
