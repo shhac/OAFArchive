@@ -20,9 +20,9 @@ Headers have the form
           cCompression    byte         1    The type of compression used on the content
           timeModified    long         8    Time the content was last modified (excluding archiving) in number of nanoseconds since 1970-01-01T00:00:00.000Z (Window's time minus 116444736000000000)
            timeCreated    long         8    Time the content was created in number of nanoseconds since 1970-01-01T00:00:00.000Z (Window's time minus 116444736000000000)
-           header.mode    int          4    Placeholder; Describes file attributes
-         header.userId    int          4    Placeholder; Describes file attributes
-        header.groupId    int          4    Placeholder; Describes file attributes
+                  mode    int          4    Placeholder; Describes file attributes
+                userId    int          4    Placeholder; Describes file attributes
+               groupId    int          4    Placeholder; Describes file attributes
              entryType    byte         1    The type of entry this header is for, e.g. file, directory, etc.
        contentHashType    byte         1    The type of hash done on the content, e.g. None, CRC32
            contentHash    long         8    The hash described by contentHashType, truncated to the first 8 bytes
