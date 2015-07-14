@@ -5,6 +5,7 @@ Details about the OAF format
  - The header does not have to be next to the file, it has a relative offset indicating where the file is located
  - The headers do not have to be together at the beginning of the archive
  - Storing an OAF inside an OAF has undefined read behaviour
+ - A header may say it's related content is any part of the archive, including the content also referenced by other headers, other headers and even itself.
 
 Headers have the form
 -
