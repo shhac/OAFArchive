@@ -5,8 +5,9 @@ Details about the OAF format
  - The header does not have to be next to the file, it has a relative offset indicating where the file is located
  - The headers do not have to be together at the beginning of the archive
  - Storing an OAF inside an OAF has undefined read behaviour
- - A header may say it's related content is any part of the archive, including the content also referenced by other headers, other headers and even itself.
+ - A header may say it's related content is any part of the archive, including the content also referenced by other headers, other headers and even itself
  - Two or more files may have the same path. Behaviour when extracting such files in one operation that would make them conflict is undefined. If being extracted over multiple operations then it should be treated the same as any other file conflict
+ - When extracting to a path containing chars not permitted by the target filesystem the behaviour is undefined
 
 Headers have the form
 -
