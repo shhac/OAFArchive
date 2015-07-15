@@ -1,6 +1,0 @@
-C:\Users\Paul\Documents\SharpDevelop Projects\OAFDemo\OAFDemo\bin\Debug\OAFDemo.exe.config
-C:\Users\Paul\Documents\SharpDevelop Projects\OAFDemo\OAFDemo\bin\Debug\OAFDemo.exe
-C:\Users\Paul\Documents\SharpDevelop Projects\OAFDemo\OAFDemo\bin\Debug\OAFDemo.pdb
-C:\Users\Paul\Documents\SharpDevelop Projects\OAFDemo\OAFDemo\obj\Debug\OAFDemo.csprojResolveAssemblyReference.cache
-C:\Users\Paul\Documents\SharpDevelop Projects\OAFDemo\OAFDemo\obj\Debug\OAFDemo.exe
-C:\Users\Paul\Documents\SharpDevelop Projects\OAFDemo\OAFDemo\obj\Debug\OAFDemo.pdb
