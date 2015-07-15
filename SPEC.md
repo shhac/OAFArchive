@@ -6,6 +6,7 @@ Details about the OAF format
  - The headers do not have to be together at the beginning of the archive
  - Storing an OAF inside an OAF has undefined read behaviour
  - A header may say it's related content is any part of the archive, including the content also referenced by other headers, other headers and even itself.
+ - Two or more files may have the same path. Behaviour when extracting such files in one operation that would make them conflict is undefined. If being extracted over multiple operations then it should be treated the same as any other file conflict
 
 Headers have the form
 -
