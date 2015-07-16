@@ -237,7 +237,7 @@ namespace OAFArchive
                 header = FindNextHeader();
                 if (header.headerPosition < 0) break;
                 headers.Add(header);
-                ArchiveStream.Position = header.headerPosition + header.headerSize + header.contentSize;
+                ArchiveStream.Position = header.headerPosition + header.headerSize;
             }
             
             ArchiveStream.Position = startPosition;
