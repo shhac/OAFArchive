@@ -131,8 +131,12 @@ namespace OAFArchive
         private OAFFileHeader FindNextHeader(long lookFrom = -1, int max_buffer = 4096)
         {
             OAFFileHeader header = new OAFFileHeader();
-            
             long position = ArchiveStream.Position;
+            if (lookFrom == -1)
+                lookFrom = position;
+            
+            // System.Diagnostics.Debug.Write("Searching from: " + lookFrom.ToString() + " ---- " + (100 * lookFrom / ArchiveStream.Length).ToString()  + " ---- " + headers.Count + "\r\n");
+            
             while (lookFrom < ArchiveStream.Length)
             {
                 if (lookFrom > position)
@@ -192,6 +196,9 @@ namespace OAFArchive
                     header.hCompression = (CompressionType)ToByte(GetNextDetail(buffer, 1, ref detailOffset));
                     // if compressed then decompress buffer..
                     // .. now get other details
+                    byte headerHashType       = ToByte(GetNextDetail(buffer, 1, ref detailOffset));
+                    header.headerHashType     = (HashType)headerHashType;
+                    header.headerHash         = ToLong(GetNextDetail(buffer, 8, ref detailOffset));
                     int pathLength            = ToInt(GetNextDetail(buffer, 4, ref detailOffset));
                     header.path               = ToString(GetNextDetail(buffer, pathLength, ref detailOffset));
                     header.contentRelativePos = ToLong(GetNextDetail(buffer, 8, ref detailOffset));
@@ -210,9 +217,6 @@ namespace OAFArchive
                     byte contentHashType      = ToByte(GetNextDetail(buffer, 1, ref detailOffset));
                     header.contentHashType    = (HashType)contentHashType;
                     header.contentHash        = ToLong(GetNextDetail(buffer, 8, ref detailOffset));
-                    byte headerHashType       = ToByte(GetNextDetail(buffer, 1, ref detailOffset));
-                    header.headerHashType     = (HashType)headerHashType;
-                    header.headerHash         = ToLong(GetNextDetail(buffer, 8, ref detailOffset));
                     
                     return header;
                 }
@@ -237,7 +241,7 @@ namespace OAFArchive
                 header = FindNextHeader();
                 if (header.headerPosition < 0) break;
                 headers.Add(header);
-                ArchiveStream.Position = header.headerPosition + header.headerSize;
+                ArchiveStream.Position = header.headerPosition + header.headerSize + (header.contentRelativePos == 0 ? header.contentSize : 0);
             }
             
             ArchiveStream.Position = startPosition;

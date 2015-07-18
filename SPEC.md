@@ -15,6 +15,8 @@ Headers have the form
            Marker.Open    byte[]      12    Marker to help searching for the file header
             headerSize    int          4    Number of bytes this header takes up in the archive file, includes Marker.Open and Marker.Close
           hCompression    byte         1    The type of compression used between (but not including) hCompression and Marker.Close, decompress this header before attempting to read more
+        headerHashType    byte         1    The type of hash done on this header between (but not including) headerHashType and Marker.Close, e.g. None, CRC32
+            headerHash    long         8    The hash described by headerHashType, truncated to the first 8 bytes
            path.Length    int          4    Number of bytes path takes up
                   path    string      ??    UTF-8 string of the content's path. Path seperater char is /
     contentRelativePos    long         8    The relative position the content is located in the archive file from the end of the header (i.e. abs position = header start position + headerSize + contentRelativePos)
@@ -29,8 +31,6 @@ Headers have the form
              entryType    byte         1    The type of entry this header is for, e.g. file, directory, etc.
        contentHashType    byte         1    The type of hash done on the content, e.g. None, CRC32
            contentHash    long         8    The hash described by contentHashType, truncated to the first 8 bytes
-        headerHashType    byte         1    The type of hash done on this header between (but not including) hCompression and headerHashType, e.g. None, CRC32
-            headerHash    long         8    The hash described by headerHashType, truncated to the first 8 bytes
           Marker.Close    byte[]      12    Marker to help searching for the file header
 
 ---

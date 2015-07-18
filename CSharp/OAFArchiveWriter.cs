@@ -101,6 +101,8 @@ namespace OAFArchive
             SimpleWrite(hStream,                          Marker.Open , ref headerSize); // "<ITEM>"
             SimpleWrite(hStream, ToBytes(                     (int)-1), ref headerSize); // placeholder for header length
             SimpleWrite(hStream, ToBytes(   (byte)header.hCompression), ref headerSize);
+            SimpleWrite(hStream, ToBytes( (byte)header.headerHashType), ref headerSize);
+            SimpleWrite(hStream, ToBytes(           header.headerHash), ref headerSize);
             SimpleWrite(hStream, ToBytes(                 path.Length), ref headerSize);
             SimpleWrite(hStream,                                 path , ref headerSize);
             SimpleWrite(hStream, ToBytes(   header.contentRelativePos), ref headerSize);
@@ -115,8 +117,6 @@ namespace OAFArchive
             SimpleWrite(hStream, ToBytes(      (byte)header.entryType), ref headerSize);
             SimpleWrite(hStream, ToBytes((byte)header.contentHashType), ref headerSize);
             SimpleWrite(hStream, ToBytes(          header.contentHash), ref headerSize);
-            SimpleWrite(hStream, ToBytes( (byte)header.headerHashType), ref headerSize);
-            SimpleWrite(hStream, ToBytes(           header.headerHash), ref headerSize);
             SimpleWrite(hStream,                         Marker.Close , ref headerSize); // "</ITEM>"
             hStream.Position = Marker.Open.Length;
             SimpleWrite(hStream, ToBytes(headerSize), ref headerSize);
