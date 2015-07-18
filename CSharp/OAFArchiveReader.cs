@@ -46,6 +46,91 @@ namespace OAFArchive
         
         #region Array methods
         
+        #region Boyer-Moore
+        
+        private static int[] BMGenBadChars(byte[] needle, int len)
+        {
+            const int A = 256; // alphabet length
+            int i;
+            int[] badChars = new int[A];
+            for (i = 0; i < A; ++i)
+                badChars[i] = len;
+            for (i = 0; i < len - 1; ++i)
+                badChars[needle[i]] = len - i - 1;
+            return badChars;
+        }
+        
+        private static int[] BMGenAllSuffixes(byte[] needle, int len)
+        {
+            int[] suffixes = new int[len];
+            int i;
+            int f = 0;
+            int g = len - 1;
+            for (i = len - 2; i >= 0; --i)
+            {
+                if ( i > g && suffixes[i + len - 1 - f] < i - g)
+                    suffixes[i] = suffixes[i + len - 1 - f];
+                else
+                {
+                    if (i < g)
+                        g = i;
+                    f = i;
+                    while (g >= 0 && needle[g] == needle[g + len - 1 - f])
+                        --g;
+                    suffixes[i] = f - g;
+                }
+            }
+            return suffixes;
+        }
+        
+        private static int[] BMGenGoodSuffixes(byte[] needle, int len)
+        {
+            int[] goodSuffixes = new int[len];
+            int i;
+            int j = 0;
+            int[] suffixes = BMGenAllSuffixes(needle, len);
+            for (i = 0; i < len; ++i)
+                goodSuffixes[i] = len;
+            for (i = len - 1; i >= 0; --i)
+                if (suffixes[i] == i + 1)
+                    for (; j < len - 1 - i; ++j)
+                        if (goodSuffixes[j] == len)
+                            goodSuffixes[j] = len - 1 - i;
+            for (i = 0; i < len - 2; ++i)
+                goodSuffixes[len - 1 - suffixes[i]] = len = 1 - i;
+            return goodSuffixes;
+        }
+        
+        private static int BMMax(int a, int b)
+        {
+            if (a > b)
+                return a;
+            return b;
+        }
+        
+        private static int BMIndexOf(byte[] haystack, byte[] needle, int offset = 0)
+        {
+            int len = needle.Length;
+            int max = haystack.Length;
+            int[] goodSuffixes = BMGenGoodSuffixes(needle, len);
+            int[] badChars = BMGenBadChars(needle, len);
+            
+            int i;
+            int j = offset;
+            while (j <= max - len) {
+                for (i = len - 1; i >= 0; --i)
+                    if (needle[i] != haystack[i])
+                        break;
+                if (i < 0)
+                    return j;
+                else
+                    j += BMMax(goodSuffixes[i], badChars[haystack[i + j]] - len + 1 + i);
+            }
+            return -1;
+        }
+        
+        #endregion
+        
         private static int IndexOf(byte[] haystack, byte[] needle, int offset = 0)
         {
             int max_j = needle.Length;
@@ -53,6 +138,7 @@ namespace OAFArchive
             bool found = false;
             int i;
             int j;
+            
             for (i = offset; i < max_i; ++i)
             {
                 for (j = 0; j < max_j; ++j)
@@ -165,7 +251,7 @@ namespace OAFArchive
                 int offset = 0;
                 while (offset < (sizeRead - Marker.Open.Length + Marker.Close.Length))
                 {
-                    int index = IndexOf(buffer, Marker.Open, offset);
+                    int index = BMIndexOf(buffer, Marker.Open, offset);
                     
                     if (index < 0 || sizeRead < (index + Marker.Open.Length + 4) ) {
                         // no more chance of finding a header in this buffer :(
@@ -180,7 +266,7 @@ namespace OAFArchive
                         return FindNextHeader(lookFrom + index, header.headerSize);
                     }
     
-                    if (-1 == IndexOf(Slice(buffer, index + header.headerSize - Marker.Close.Length, index + header.headerSize), Marker.Close))
+                    if (-1 == BMIndexOf(Slice(buffer, index + header.headerSize - Marker.Close.Length, index + header.headerSize), Marker.Close))
                     {
                         // not a header :( try again
                         offset += index + 1;
