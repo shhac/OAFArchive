@@ -287,14 +287,16 @@ namespace OAFArchive
             // mode, userId, groupId etc not implemented
         }
         
-        public void Extract(int itemIndex, string rootPath = ".", int bufferSize = 4096)
+        public string Extract(int itemIndex, string rootPath = ".", int bufferSize = 4096)
         {
             OAFFileHeader header = headers[itemIndex];
+            string destination = header.path.Replace('/', Path.DirectorySeparatorChar);
             ExtractToPath(
                 itemIndex,
-                rootPath.TrimEnd(new char[1] {Path.DirectorySeparatorChar}) + Path.DirectorySeparatorChar + header.path.Replace('/', Path.DirectorySeparatorChar),
+                rootPath.TrimEnd(new char[1] {Path.DirectorySeparatorChar}) + Path.DirectorySeparatorChar + destination,
                 bufferSize
                );
+            return destination;
         }
         
         public void ExtractAll(string rootPath = ".", int bufferSize = 4096)
